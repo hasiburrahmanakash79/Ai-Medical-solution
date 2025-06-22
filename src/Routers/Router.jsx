@@ -11,7 +11,7 @@ import ProfileInformation from "../Pages/Dashboards/Setting/ProfileInfo";
 import Users from "../Pages/Dashboards/Users/Users";
 import Challenge from "../Pages/Dashboards/Challenge/Challenge";
 import PrivacyPolicy from "../Pages/Dashboards/Setting/PrivacyPolicy";
-import Quotes from "../Pages/Dashboards/Quotes/Quotes";
+import Tokens from "../Pages/Dashboards/Tokens/Tokens";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/token",
-        element: <Quotes />,
+        element: <Tokens />,
       },
       {
         path: "/challenge",

@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { RiArrowLeftLine, RiDeleteBin5Line } from "react-icons/ri";
+import {
+  RiArrowLeftLine,
+  RiDeleteBin5Line,
+} from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import CommonModal from "../../../components/Common/CommonModal"; // ✅ Make sure this path is correct
 
@@ -114,76 +117,78 @@ const Users = () => {
   };
 
   return (
-    <div className="overflow-x-auto">
-      <div className="flex items-center gap-3 mb-6">
-        <button
-          className="text-2xl cursor-pointer"
-          onClick={() => navigate(-1)}
-        >
-          <RiArrowLeftLine />
-        </button>
-        <h1 className="text-2xl font-semibold">All Users</h1>
-      </div>
-      <div className="border border-gray-200 rounded-xl p-5">
-        <table className="min-w-full rounded-xl text-center overflow-hidden">
-          <thead>
-            <tr className="text-sm bg-[#B7C8FF]">
-              <th className="p-4 text-left rounded-tl-xl">User Name</th>
-              <th className="p-4">Email</th>
-              <th className="p-4">Number</th>
-              <th className="p-4">Date of Birth</th>
-              <th className="p-4">Specialty</th>
-              <th className="p-4">Country</th>
-              <th className="p-4 rounded-tr-xl">Action</th>
-            </tr>
-          </thead>
-          <tbody className="text-sm text-center">
-            {users.map((user, idx) => (
-              <tr key={idx} className="border-t border-gray-200">
-                <td className="py-3 px-4 text-left">{user.name}</td>
-                <td className="py-4 px-4">{user.email}</td>
-                <td className="py-3 px-4">0{user.phone}</td>
-                <td className="py-3 px-4">{user.dob}</td>
-                <td className="py-3 px-4">{user.specialty}</td>
-                <td className="py-3 px-4">{user.country}</td>
-                <td className="py-4 px-4 flex justify-center text-xl">
-                  <button onClick={() => handleDeleteClick(user)}>
-                    <RiDeleteBin5Line className="text-red-500 hover:text-red-700 transition" />
-                  </button>
-                </td>
+    <div>
+      
+      <div className="overflow-x-auto">
+        <div className="flex items-center gap-3 mb-6">
+          <button
+            className="text-2xl cursor-pointer"
+            onClick={() => navigate(-1)}
+          >
+            <RiArrowLeftLine />
+          </button>
+          <h1 className="text-2xl font-semibold">All Users</h1>
+        </div>
+        <div className="border border-gray-200 rounded-xl p-5">
+          <table className="min-w-full rounded-xl text-center overflow-hidden">
+            <thead>
+              <tr className="text-sm bg-[#B7C8FF]">
+                <th className="p-4 text-left rounded-tl-xl">User Name</th>
+                <th className="p-4">Email</th>
+                <th className="p-4">Number</th>
+                <th className="p-4">Date of Birth</th>
+                <th className="p-4">Specialty</th>
+                <th className="p-4">Country</th>
+                <th className="p-4 rounded-tr-xl">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="text-sm text-center">
+              {users.map((user, idx) => (
+                <tr key={idx} className="border-t border-gray-200">
+                  <td className="py-3 px-4 text-left">{user.name}</td>
+                  <td className="py-4 px-4">{user.email}</td>
+                  <td className="py-3 px-4">0{user.phone}</td>
+                  <td className="py-3 px-4">{user.dob}</td>
+                  <td className="py-3 px-4">{user.specialty}</td>
+                  <td className="py-3 px-4">{user.country}</td>
+                  <td className="py-4 px-4 flex justify-center text-xl">
+                    <button onClick={() => handleDeleteClick(user)}>
+                      <RiDeleteBin5Line className="text-red-500 hover:text-red-700 transition" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-      {/* ✅ Delete Confirmation Modal */}
-      <CommonModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Confirm Delete"
-      >
-        {userToDelete && (
-          <div className="space-y-4 text-center">
-            <p className="text-lg">
-              Are you sure you want to delete{" "}
-              <span className="text-primary-gradient">{userToDelete.name}</span>
-              ?
-            </p>
-            <div className="flex justify-center gap-4 mt-4">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="border px-5 py-3 rounded-md"
-              >
-                Cancel
-              </button>
-              <button onClick={confirmDelete} className="btn-primary">
-                Confirm
-              </button>
+        {/* ✅ Delete Confirmation Modal */}
+        <CommonModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="Confirm Delete"
+        >
+          {userToDelete && (
+            <div className="space-y-4 text-center">
+              <p className="text-lg">
+                Are you sure you want to delete{" "}
+                <span className="">{userToDelete.name}</span>?
+              </p>
+              <div className="flex justify-center gap-4 mt-4">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="border border-blue-300 px-5 py-3 rounded-md"
+                >
+                  Cancel
+                </button>
+                <button onClick={confirmDelete} className="btn-primary">
+                  Confirm
+                </button>
+              </div>
             </div>
-          </div>
-        )}
-      </CommonModal>
+          )}
+        </CommonModal>
+      </div>
     </div>
   );
 };

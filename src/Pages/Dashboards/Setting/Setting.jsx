@@ -1,6 +1,6 @@
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CommonModal from "../../../components/Common/CommonModal";
 import { useForm } from "react-hook-form";
 import { RiArrowLeftLine } from "react-icons/ri";
@@ -10,6 +10,9 @@ const Setting = () => {
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [timer, setTimer] = useState(60);
   const [resendEnabled, setResendEnabled] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const inputRefs = useRef([]);
 
   const [formData, setFormData] = useState({
     currentPassword: "",
@@ -22,8 +25,12 @@ const Setting = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm();
 
+  const navigate = useNavigate();
+
+  // Resend OTP timer
   useEffect(() => {
     let interval;
     if (!resendEnabled && showOtpModal) {
@@ -44,7 +51,8 @@ const Setting = () => {
   const handleResendOtp = () => {
     setResendEnabled(false);
     setTimer(60);
-    // Trigger resend API here
+    alert("OTP resent to your email!");
+    // TODO: Add actual resend API call
   };
 
   const handleChange = (field, value) => {
@@ -55,25 +63,45 @@ const Setting = () => {
   };
 
   const handleSave = () => {
-    // Password change API call
+    // TODO: Add password change API call
     console.log("Password Data:", formData);
     setShowPasswordModal(false);
-
-    // Show OTP modal
     setTimeout(() => setShowOtpModal(true), 300);
   };
 
-  const onSubmit = (data) => {
-    const otp = Object.values(data).join("");
-    console.log("OTP Submitted:", otp);
-    setShowOtpModal(false);
-    reset();
+  // OTP field logic (copied from OtpVerification)
+  const handleInputChange = (e, index) => {
+    const value = e.target.value;
+    if (/^[0-9]?$/.test(value)) {
+      setValue(`otp${index}`, value, { shouldValidate: true });
+      if (index < 5 && value) {
+        inputRefs.current[index + 1]?.focus();
+      }
+    }
   };
 
-  const navigate = useNavigate();
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !e.target.value && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const onSubmit = (data) => {
+    setIsSubmitting(true);
+    const otp = Object.values(data).join("");
+    console.log("OTP Submitted:", otp);
+
+    // Simulate verify
+    setTimeout(() => {
+      setShowOtpModal(false);
+      reset();
+      setIsSubmitting(false);
+      alert("OTP Verified!");
+    }, 1000);
+  };
 
   return (
-    <div className="">
+    <div>
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <button className="text-2xl cursor-pointer" onClick={() => navigate(-1)}>
@@ -86,7 +114,7 @@ const Setting = () => {
       <div className="space-y-5">
         <Link
           to="/setting/profile"
-          className=" bg-[#B7C8FF] p-5 rounded-lg flex justify-between items-center w-full px-7"
+          className="bg-[#B7C8FF] p-5 rounded-lg flex justify-between items-center w-full px-7"
         >
           <p>Personal Information</p>
           <IoChevronForwardSharp />
@@ -94,12 +122,16 @@ const Setting = () => {
 
         <button
           onClick={() => setShowPasswordModal(true)}
-          className=" bg-[#B7C8FF] p-5 rounded-lg flex justify-between items-center w-full px-7"
+          className="bg-[#B7C8FF] p-5 rounded-lg flex justify-between items-center w-full px-7"
         >
           <p>Change Password</p>
           <IoChevronForwardSharp />
         </button>
-        <Link to='/setting/privacy' className=" bg-[#B7C8FF] p-5 rounded-lg flex justify-between items-center w-full px-7">
+
+        <Link
+          to="/setting/privacy"
+          className="bg-[#B7C8FF] p-5 rounded-lg flex justify-between items-center w-full px-7"
+        >
           <p>Privacy & Policy</p>
           <IoChevronForwardSharp />
         </Link>
@@ -139,10 +171,7 @@ const Setting = () => {
             className="w-full border border-gray-300 p-3 rounded"
           />
 
-          <button
-            onClick={handleSave}
-            className="w-full btn-primary"
-          >
+          <button onClick={handleSave} className="w-full btn-primary">
             Update Password
           </button>
         </div>
@@ -159,9 +188,18 @@ const Setting = () => {
             {[...Array(6)].map((_, index) => (
               <input
                 key={index}
-                {...register(`otp${index}`, { required: true, maxLength: 1 })}
                 type="text"
                 maxLength="1"
+                {...register(`otp${index}`, {
+                  required: "Required",
+                  pattern: {
+                    value: /^[0-9]$/,
+                    message: "Must be a digit",
+                  },
+                })}
+                ref={(el) => (inputRefs.current[index] = el)}
+                onChange={(e) => handleInputChange(e, index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
                 className="w-12 h-12 text-center border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
               />
             ))}
@@ -169,7 +207,7 @@ const Setting = () => {
 
           {Object.keys(errors).length > 0 && (
             <p className="text-red-500 text-sm text-center">
-              Please fill all OTP fields
+              Please fill all OTP fields correctly
             </p>
           )}
 
@@ -194,9 +232,10 @@ const Setting = () => {
 
           <button
             type="submit"
+            disabled={isSubmitting}
             className="w-full btn-primary"
           >
-            Verify OTP
+            {isSubmitting ? "Verifying..." : "Verify OTP"}
           </button>
         </form>
       </CommonModal>

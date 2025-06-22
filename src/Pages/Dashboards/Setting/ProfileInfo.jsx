@@ -91,7 +91,7 @@ const ProfileInformation = () => {
               </>
             )}
           </div>
-          <p className="mt-4 text-gray-400">Profile</p>
+          <p className="mt-4 text-gray-700">Profile</p>
           <p className="text-2xl font-semibold mt-3">{formData.role}</p>
         </div>
 
@@ -129,7 +129,7 @@ const ProfileInformation = () => {
               inputClass="!w-full p-7 rounded-lg"
               containerClass="!w-full"
               inputStyle={{
-                backgroundColor: "#1E3363",
+                backgroundColor: "#B7C8FF",
                 border: 0,
               }}
             />

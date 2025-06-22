@@ -1,7 +1,11 @@
-import { RiBarChartBoxLine, RiFileList3Line, RiFlagLine, RiUserCommunityLine } from "react-icons/ri";
+import {
+  RiBarChartBoxLine,
+  RiCopperCoinLine,
+  RiFlagLine,
+  RiUserCommunityLine,
+} from "react-icons/ri";
 
 const DashboardCard = () => {
-  
   return (
     <div className="grid grid-cols-7 gap-7">
       <div className="col-span-5 grid grid-cols-3 gap-7">
@@ -16,7 +20,7 @@ const DashboardCard = () => {
         </div>
         <div className="rounded-2xl p-10 text-white bg-[#9B30FF]">
           <div className="flex items-center justify-center gap-5">
-            <RiFileList3Line className="text-4xl" />
+            <RiCopperCoinLine className="text-4xl" />
             <div className="space-y-3">
               <p className="text-lg">Total Earning</p>
               <h1 className="text-3xl font-semibold">233</h1>
