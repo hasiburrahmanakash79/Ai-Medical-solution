@@ -18,7 +18,7 @@ const DashboardCard = () => {
           <div className="flex items-center justify-center gap-5">
             <RiFileList3Line className="text-4xl" />
             <div className="space-y-3">
-              <p className="text-lg">Total Quote</p>
+              <p className="text-lg">Total Earning</p>
               <h1 className="text-3xl font-semibold">233</h1>
             </div>
           </div>
@@ -27,7 +27,7 @@ const DashboardCard = () => {
           <div className="flex items-center justify-center gap-5">
             <RiFlagLine className="text-4xl" />
             <div className="space-y-3">
-              <p className="text-lg">Total Challenge</p>
+              <p className="text-lg">Total Sold</p>
               <h1 className="text-3xl font-semibold">300</h1>
             </div>
           </div>

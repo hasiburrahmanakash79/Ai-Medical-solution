@@ -1,7 +1,7 @@
 import DashboardCard from './DashboardCard';
-import RecentQuote from './RecentQuote';
 import RecentUser from './RecentUser';
 import WeeklyActivity from './WeeklyActivity';
+import RecentToken from './RecentToken';
 
 const Home = () => {
     return (
@@ -12,7 +12,7 @@ const Home = () => {
                     <WeeklyActivity/>
                 </div>
                 <div className='col-span-2'>
-                    <RecentQuote/>
+                    <RecentToken/>
                 </div>
             </div>
             <RecentUser/>

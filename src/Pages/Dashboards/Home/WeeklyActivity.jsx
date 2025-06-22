@@ -51,7 +51,7 @@ const WeeklyActivity = () => {
 return (
     <div className="border border-gray-300 p-5 rounded-xl">
         <div className="pb-3 flex items-center justify-between">
-            <h4 className="font-semibold text-lg">Weekly Summary</h4>
+            <h4 className="font-semibold text-lg">Token Selling Activity</h4>
             <select
                 className="text-sm px-2 py-1 rounded-md outline-none text-gray-500"
                 value={selectedRange}

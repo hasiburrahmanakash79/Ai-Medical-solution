@@ -47,7 +47,7 @@ const Dashboard = () => {
       role: "admin",
     },
     {
-      title: "Token",
+      title: "Tokens",
       path: "/token",
       icon: iconMappings.Quote,
       role: "admin",
