@@ -88,7 +88,7 @@ const SignIn = () => {
                 Remember me
               </label>
               <a
-                href="/forgot-password"
+                href="/forgot_password"
                 className="text-blue-500 hover:underline"
               >
                 Forgot Password?

@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import logo from "../../assets/logo/logo.png";
 
 const ResetPass = () => {
   const {
@@ -9,35 +9,32 @@ const ResetPass = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Submitted:", data);
-    // Password reset logic here
-  };
-
   const password = watch("password");
 
-  return (
-    <div className="flex min-h-screen">
-      {/* Left Side */}
-      <div className="w-1/2 bg-blue-500 flex items-center justify-center p-8">
-        <h2 className="text-white text-center text-4xl font-bold leading-relaxed">
-          Logo
-        </h2>
-      </div>
+  const onSubmit = (data) => {
+    console.log("Submitted:", data);
+    // TODO: Call reset password API here
+  };
 
-      {/* Right Side */}
-      <div className="w-1/2 flex items-center justify-center p-8">
-        <div className="max-w-xl w-full p-20 relative">
-          <div className="relative z-10 border border-gray-200 backdrop-blur-sm rounded-xl shadow-lg p-8 w-full max-w-md transform -translate-x-[10%]">
-            <h2 className="text-center text-xl font-semibold mb-2 text-gray-800">
+  return (
+    <div className="flex min-h-screen justify-center items-center bg-gray-100 px-4">
+      <div className="flex items-center justify-center px-8 py-12 w-full max-w-md bg-[#DEE5FF] rounded-lg shadow-md">
+        <div className="w-full">
+          {/* Logo + Heading */}
+          <div className="flex flex-col items-center">
+            <img src={logo} alt="Logo" className="w-32 mb-4" />
+            <h2 className="text-2xl font-semibold text-gray-800 mb-2">
               Reset Password
             </h2>
-            <p className="text-center text-sm text-gray-700 mb-6">
+            <p className="text-sm text-gray-600 text-center mb-6">
               Your password must be 8–10 characters long.
             </p>
+          </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              {/* Password */}
+          {/* Form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* New Password */}
+            <div>
               <label className="block text-sm mb-1">New Password</label>
               <input
                 type="password"
@@ -47,49 +44,45 @@ const ResetPass = () => {
                   minLength: { value: 8, message: "Minimum 8 characters" },
                   maxLength: { value: 10, message: "Maximum 10 characters" },
                 })}
-                className="w-full px-4 py-2 rounded border border-blue-200 outline-none"
+                className="w-full px-4 py-2 rounded border border-blue-300 outline-none focus:ring-2 focus:ring-blue-400"
               />
               {errors.password && (
-                <p className="text-red-600 text-sm">
+                <p className="text-red-600 text-sm mt-1">
                   {errors.password.message}
                 </p>
               )}
+            </div>
 
-              {/* Confirm Password */}
-              <label className="block text-sm mb-1">confirm New Password</label>
+            {/* Confirm Password */}
+            <div>
+              <label className="block text-sm mb-1">Confirm New Password</label>
               <input
                 type="password"
-                placeholder="Confirm New Password"
+                placeholder="Confirm Password"
                 {...register("confirmPassword", {
                   required: "Please re-enter password",
                   validate: (value) =>
                     value === password || "Passwords do not match",
                 })}
-                className="w-full px-4 py-2 rounded border border-blue-200 outline-none"
+                className="w-full px-4 py-2 rounded border border-blue-300 outline-none focus:ring-2 focus:ring-blue-400"
               />
               {errors.confirmPassword && (
-                <p className="text-red-600 text-sm">
+                <p className="text-red-600 text-sm mt-1">
                   {errors.confirmPassword.message}
                 </p>
               )}
+            </div>
 
-              {/* Submit Button */}
-              <div className="flex justify-center gap-5">
-                <button
-                  type="submit"
-                  className="btn-primary"
-                >
-                  Confirm
-                </button>
-                <Link
-                  to="/"
-                  className="w-full text-blue-500 border border-blue-200 text-center rounded px-4 py-2 mt-5"
-                >
-                  Cancel
-                </Link>
-              </div>
-            </form>
-          </div>
+            {/* Buttons */}
+            <div className=" mt-4">
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md"
+              >
+                Confirm
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

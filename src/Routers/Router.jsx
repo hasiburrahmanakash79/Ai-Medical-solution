@@ -12,6 +12,7 @@ import Users from "../Pages/Dashboards/Users/Users";
 import Challenge from "../Pages/Dashboards/Challenge/Challenge";
 import PrivacyPolicy from "../Pages/Dashboards/Setting/PrivacyPolicy";
 import Tokens from "../Pages/Dashboards/Tokens/Tokens";
+import ForgetPassword from "../Pages/Authentication/ForgetPassword";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
   {
     path: "/otp",
     element: <OtpVerification />,
+  },
+  {
+    path: "/forgot_password",
+    element: <ForgetPassword />,
   },
   {
     path: "/reset_password",
