@@ -3,7 +3,6 @@ import {
   RiArrowLeftLine,
   RiCopperCoinLine,
   RiDeleteBin5Line,
-  RiEditBoxLine,
 } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import CommonModal from "../../../components/Common/CommonModal";
@@ -50,22 +49,12 @@ const tokens = [
 const Tokens = () => {
   const navigate = useNavigate();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [tokenToDelete, setTokenToDelete] = useState(null);
-  const [selectedToken, setSelectedToken] = useState(null);
 
 
-  const handleEdit = (token) => {
-    setSelectedToken(token);
-    setIsEditModalOpen(true);
-  };
 
-  const handleUpdateToken = () => {
-    console.log("Updated token:", selectedToken);
-    setIsEditModalOpen(false);
-    setSelectedToken(null);
-    // TODO: Update the token in your list or via API
-  };
+
+
 
   const handleDeleteClick = (token) => {
     setTokenToDelete(token);
@@ -141,10 +130,7 @@ const Tokens = () => {
               <td className="py-3 px-4">{token?.email}</td>
               <td className="py-3 px-4">{token?.tokenNumber}</td>
               <td className="py-3 px-4">{token?.lastRefillDate}</td>
-              <td className="py-3 px-4 flex items-center gap-5">
-                <button onClick={() => handleEdit(token)}>
-                  <RiEditBoxLine className="cursor-pointer" />
-                </button>
+              <td className="py-3 px-4">
                 <button onClick={() => handleDeleteClick(token)}>
                   <RiDeleteBin5Line className="text-red-500 hover:text-red-700 transition cursor-pointer" />
                 </button>
@@ -155,64 +141,6 @@ const Tokens = () => {
       </table>
 
 
-      <CommonModal
-        isOpen={isEditModalOpen}
-        onClose={() => {
-          setIsEditModalOpen(false);
-          setSelectedToken(null);
-        }}
-        title="Edit token"
-      >
-        {selectedToken && (
-          <>
-            <input
-              type="text"
-              placeholder="Author Name"
-              className="w-full border border-blue-300 rounded-md p-2 mb-4"
-            />
-            <select
-              name="category"
-              className="w-full border border-blue-300 rounded-md p-2 mb-4"
-              value={selectedToken.category}
-              onChange={(e) =>
-                setSelectedToken({ ...selectedToken, category: e.target.value })
-              }
-            >
-              <option value="" disabled>
-                Select Category
-              </option>
-              <option value="sad">Sad</option>
-              <option value="success">Success</option>
-              <option value="motivation">Motivation</option>
-              <option value="life">Life</option>
-              <option value="love">Love</option>
-              <option value="happiness">Happiness</option>
-            </select>
-
-            <textarea
-              rows={4}
-              className="w-full border border-blue-300 rounded-md p-2"
-              placeholder="Edit token"
-              value={selectedToken.token}
-              onChange={(e) =>
-                setSelectedToken({ ...selectedToken, token: e.target.value })
-              }
-            />
-
-            <div className="flex justify-end gap-3 pt-4">
-              <button
-                onClick={() => setIsEditModalOpen(false)}
-                className="border px-4 py-2 rounded-md"
-              >
-                Cancel
-              </button>
-              <button onClick={handleUpdateToken} className="btn-primary">
-                Save
-              </button>
-            </div>
-          </>
-        )}
-      </CommonModal>
 
       {/* ✅ Delete Confirmation Modal */}
       <CommonModal

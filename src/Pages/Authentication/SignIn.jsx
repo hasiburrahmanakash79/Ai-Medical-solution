@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import logo from '../../assets/logo/logo.png'
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -18,6 +20,7 @@ const SignIn = () => {
   const onSubmit = (data) => {
     console.log("SignIn Data:", data);
     // Sign-in logic here
+    navigate("/");
   };
 
   return (
