@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -16,6 +16,7 @@
     "@mui/x-charts": "^8.0.0-beta.3",
     "@tailwindcss/vite": "^4.0.8",
     "@tanstack/react-query": "^5.71.10",
+    "axios": "^1.11.0",
     "lucide-react": "^0.503.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

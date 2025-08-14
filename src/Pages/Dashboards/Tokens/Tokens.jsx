@@ -6,55 +6,16 @@ import {
 } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import CommonModal from "../../../components/Common/CommonModal";
-
-const tokens = [
-  {
-    id: 1,
-    username: "Albert Einstein",
-    email: "albert.einstein@example.com",
-    tokenNumber: "TK-983217",
-    lastRefillDate: "2025-06-01",
-  },
-  {
-    id: 2,
-    username: "Maya Angelou",
-    email: "maya.angelou@example.com",
-    tokenNumber: "TK-874561",
-    lastRefillDate: "2025-06-05",
-  },
-  {
-    id: 3,
-    username: "Steve Jobs",
-    email: "steve.jobs@example.com",
-    tokenNumber: "TK-345902",
-    lastRefillDate: "2025-06-10",
-  },
-  {
-    id: 4,
-    username: "Confucius",
-    email: "confucius@example.com",
-    tokenNumber: "TK-220198",
-    lastRefillDate: "2025-06-15",
-  },
-  {
-    id: 5,
-    username: "Helen Keller",
-    email: "helen.keller@example.com",
-    tokenNumber: "TK-119374",
-    lastRefillDate: "2025-06-20",
-  },
-];
+import useTokenData from "../../../hooks/useTokenData";
 
 
 const Tokens = () => {
+  const {tokenData, loading} = useTokenData();
   const navigate = useNavigate();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [tokenToDelete, setTokenToDelete] = useState(null);
-
-
-
-
-
+  const userList = tokenData?.data?.users
+  console.log(userList);
 
   const handleDeleteClick = (token) => {
     setTokenToDelete(token);
@@ -67,6 +28,11 @@ const Tokens = () => {
     setIsDeleteModalOpen(false);
     setTokenToDelete(null);
   };
+  console.log(tokenData, 'tokenData');
+
+  if(loading){
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -85,22 +51,22 @@ const Tokens = () => {
             <RiCopperCoinLine className="text-4xl" />
             <div className="space-y-3">
               <p className="text-lg">This Month Sell</p>
-              <h1 className="text-3xl font-semibold">120</h1>
+              <h1 className="text-3xl font-semibold">{tokenData?.data?.thisMonthTokens}</h1>
             </div>
           </div>
         </div>
         <div className="rounded-2xl p-10 text-white bg-[#9B30FF]">
           <div className="flex items-center justify-center gap-5">
-            <RiCopperCoinLine  className="text-4xl" />
+            <RiCopperCoinLine className="text-4xl" />
             <div className="space-y-3">
               <p className="text-lg">Last Month Sell</p>
-              <h1 className="text-3xl font-semibold">233</h1>
+              <h1 className="text-3xl font-semibold">{tokenData?.data?.lastMonthTokens}</h1>
             </div>
           </div>
         </div>
         <div className="rounded-2xl p-10 text-white bg-[#FF3EC8]">
           <div className="flex items-center justify-center gap-5">
-            <RiCopperCoinLine  Line className="text-4xl" />
+            <RiCopperCoinLine Line className="text-4xl" />
             <div className="space-y-3">
               <p className="text-lg">Tokens Used This Month</p>
               <h1 className="text-3xl font-semibold">300</h1>
@@ -121,15 +87,15 @@ const Tokens = () => {
           </tr>
         </thead>
         <tbody className="text-sm">
-          {tokens.map((token, index) => (
+          {userList.map((token, index) => (
             <tr key={token?.id} className="border-t border-gray-200">
               <td className="py-3 px-4">{index + 1}</td>
               <td className="py-3 px-4 text-left hover:text-blue-500 hover:underline">
-                <Link to={`/author/${token?._id}`}>{token?.username}</Link>
+                <Link to={`/author/${token?._id}`}>{token?.fullName}</Link>
               </td>
               <td className="py-3 px-4">{token?.email}</td>
-              <td className="py-3 px-4">{token?.tokenNumber}</td>
-              <td className="py-3 px-4">{token?.lastRefillDate}</td>
+              <td className="py-3 px-4">{token?.currentToken}</td>
+              <td className="py-3 px-4">{token?.lastBuyDate}</td>
               <td className="py-3 px-4">
                 <button onClick={() => handleDeleteClick(token)}>
                   <RiDeleteBin5Line className="text-red-500 hover:text-red-700 transition cursor-pointer" />
@@ -139,8 +105,6 @@ const Tokens = () => {
           ))}
         </tbody>
       </table>
-
-
 
       {/* ✅ Delete Confirmation Modal */}
       <CommonModal
