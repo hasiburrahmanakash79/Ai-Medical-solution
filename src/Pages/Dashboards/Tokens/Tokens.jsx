@@ -1,36 +1,16 @@
-import { useState } from "react";
-import {
-  RiArrowLeftLine,
-  RiCopperCoinLine,
-  RiDeleteBin5Line,
-} from "react-icons/ri";
+import { RiArrowLeftLine, RiCopperCoinLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
-import CommonModal from "../../../components/Common/CommonModal";
 import useTokenData from "../../../hooks/useTokenData";
 
-
 const Tokens = () => {
-  const {tokenData, loading} = useTokenData();
+  const { tokenData, loading } = useTokenData();
   const navigate = useNavigate();
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [tokenToDelete, setTokenToDelete] = useState(null);
-  const userList = tokenData?.data?.users
+  const userList = tokenData?.data?.users;
   console.log(userList);
 
-  const handleDeleteClick = (token) => {
-    setTokenToDelete(token);
-    setIsDeleteModalOpen(true);
-  };
+  console.log(tokenData, "tokenData");
 
-  const confirmDelete = () => {
-    console.log("Deleted user:", tokenToDelete);
-    // TODO: Remove token from list or trigger API call here
-    setIsDeleteModalOpen(false);
-    setTokenToDelete(null);
-  };
-  console.log(tokenData, 'tokenData');
-
-  if(loading){
+  if (loading) {
     return <div>Loading...</div>;
   }
 
@@ -51,7 +31,9 @@ const Tokens = () => {
             <RiCopperCoinLine className="text-4xl" />
             <div className="space-y-3">
               <p className="text-lg">This Month Sell</p>
-              <h1 className="text-3xl font-semibold">{tokenData?.data?.thisMonthTokens}</h1>
+              <h1 className="text-3xl font-semibold">
+                {tokenData?.data?.thisMonthTokens}
+              </h1>
             </div>
           </div>
         </div>
@@ -60,7 +42,9 @@ const Tokens = () => {
             <RiCopperCoinLine className="text-4xl" />
             <div className="space-y-3">
               <p className="text-lg">Last Month Sell</p>
-              <h1 className="text-3xl font-semibold">{tokenData?.data?.lastMonthTokens}</h1>
+              <h1 className="text-3xl font-semibold">
+                {tokenData?.data?.lastMonthTokens}
+              </h1>
             </div>
           </div>
         </div>
@@ -83,7 +67,6 @@ const Tokens = () => {
             <th className="p-4">Email</th>
             <th className="p-4">Token</th>
             <th className="p-4">Last Refill</th>
-            <th className="p-4">Action</th>
           </tr>
         </thead>
         <tbody className="text-sm">
@@ -95,40 +78,25 @@ const Tokens = () => {
               </td>
               <td className="py-3 px-4">{token?.email}</td>
               <td className="py-3 px-4">{token?.currentToken}</td>
-              <td className="py-3 px-4">{token?.lastBuyDate}</td>
               <td className="py-3 px-4">
-                <button onClick={() => handleDeleteClick(token)}>
-                  <RiDeleteBin5Line className="text-red-500 hover:text-red-700 transition cursor-pointer" />
-                </button>
+                {token?.lastBuyDate
+                  ? new Date(token.lastBuyDate).toLocaleDateString("en-US", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    }) +
+                    ", " +
+                    new Date(token.lastBuyDate).toLocaleTimeString("en-US", {
+                      hour: "numeric",
+                      minute: "2-digit",
+                      hour12: true,
+                    })
+                  : "N/A"}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* ✅ Delete Confirmation Modal */}
-      <CommonModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        title="Confirm Delete"
-      >
-        {tokenToDelete && (
-          <div className="space-y-4 text-center">
-            <p className="text-lg">Are you sure you want to delete?</p>
-            <div className="flex justify-center gap-4 mt-4">
-              <button
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="border px-5 py-3 rounded-md"
-              >
-                Cancel
-              </button>
-              <button onClick={confirmDelete} className="btn-primary">
-                Confirm
-              </button>
-            </div>
-          </div>
-        )}
-      </CommonModal>
     </div>
   );
 };
