@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
-import CommonModal from "../../../components/Common/CommonModal";
 import { RiArrowLeftLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import CommonModal from "../../../components/CommonModal";
 
 const initialNotifications = [
   {

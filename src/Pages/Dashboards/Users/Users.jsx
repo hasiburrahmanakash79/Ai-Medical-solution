@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { RiArrowLeftLine, RiDeleteBin5Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import CommonModal from "../../../components/Common/CommonModal"; // ✅ Make sure this path is correct
 import useUser from "../../../hooks/useUser";
+import CommonModal from "../../../components/CommonModal";
 
 const Users = () => {
   const { users, loading } = useUser();

@@ -2,29 +2,93 @@ import { useForm } from "react-hook-form";
 import { useState, useEffect, useRef } from "react";
 import { FaLeftLong } from "react-icons/fa6";
 import logo from "../../assets/logo/logo.png";
+import { useNavigate } from "react-router-dom";
+import { getCookie } from "../../lib/cookie-utils";
+import apiClient from "../../lib/api-client";
 
 const OtpVerification = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
     clearErrors,
   } = useForm();
-
   const [timer, setTimer] = useState(60);
   const [resendEnabled, setResendEnabled] = useState(false);
+  const [apiError, setApiError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const inputRefs = useRef([]);
 
-  // Submit handler
-  const onSubmit = (data) => {
+  // Submit handler for OTP verification
+  const onSubmit = async (data) => {
     const values = Object.values(data);
     const isComplete = values.every((v) => v && v.length === 1);
     if (!isComplete) return;
 
     const otp = values.join("");
-    console.log("OTP Entered:", otp);
+    setIsLoading(true);
+    setApiError(null);
 
-    // TODO: Call your verify API here
+    try {
+      const accessToken = getCookie("accessToken");
+      if (!accessToken) {
+        setApiError("No access token found. Please sign in again.");
+        setIsLoading(false);
+        return;
+      }
+
+      await apiClient.post(
+        "/auth/verify-user",
+        { otp },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+
+      // On successful verification, navigate to the home page
+      navigate("/");
+    } catch (err) {
+      setApiError(
+        err.response?.data?.message || "Failed to verify OTP. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Resend OTP handler
+  const handleResendOtp = async () => {
+    if (resendEnabled) {
+      setIsLoading(true);
+      setApiError(null);
+
+      try {
+        const accessToken = getCookie("accessToken");
+        if (!accessToken) {
+          setApiError("No access token found. Please sign in again.");
+          setIsLoading(false);
+          return;
+        }
+
+        await apiClient.post(
+          "/auth/resend-code",
+          {},
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
+
+        setTimer(60);
+        setResendEnabled(false);
+      } catch (err) {
+        setApiError(
+          err.response?.data?.message || "Failed to resend OTP. Please try again."
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   // Countdown Timer
@@ -39,26 +103,17 @@ const OtpVerification = () => {
     }
   }, [timer]);
 
-  // Handle resend
-  const handleResendOtp = () => {
-    if (resendEnabled) {
-      console.log("Resend OTP triggered");
-      setTimer(60);
-      setResendEnabled(false);
-      // TODO: Trigger resend OTP API
-    }
-  };
-
-  // Auto move next and clear errors
+  // Auto move to next input and clear errors
   const handleInputChange = (e, index) => {
     const { value } = e.target;
     if (/^[0-9]$/.test(value) && value.length === 1 && index < 3) {
       inputRefs.current[index + 1]?.focus();
     }
     clearErrors();
+    setApiError(null); // Clear API errors on input change
   };
 
-  // Backspace to previous
+  // Backspace to previous input
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace" && !e.target.value && index > 0) {
       inputRefs.current[index - 1]?.focus();
@@ -80,6 +135,11 @@ const OtpVerification = () => {
             </p>
           </div>
 
+          {/* API Error Message */}
+          {apiError && (
+            <p className="text-red-500 text-sm text-center mb-4">{apiError}</p>
+          )}
+
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* OTP Fields */}
@@ -94,11 +154,12 @@ const OtpVerification = () => {
                   onInput={(e) => handleInputChange(e, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   className="w-14 h-12 text-center border border-blue-400 rounded-full text-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  disabled={isLoading}
                 />
               ))}
             </div>
 
-            {/* Error Message */}
+            {/* Form Error Message */}
             {Object.keys(errors).length > 0 && (
               <p className="text-red-500 text-sm text-center mt-2">
                 Please fill all OTP fields
@@ -112,6 +173,7 @@ const OtpVerification = () => {
                   type="button"
                   onClick={handleResendOtp}
                   className="text-blue-600 hover:underline"
+                  disabled={isLoading}
                 >
                   Resend OTP
                 </button>
@@ -124,8 +186,9 @@ const OtpVerification = () => {
             <button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md"
+              disabled={isLoading}
             >
-              Verify OTP
+              {isLoading ? "Verifying..." : "Verify OTP"}
             </button>
           </form>
 
@@ -134,6 +197,7 @@ const OtpVerification = () => {
             <button
               onClick={() => window.history.back()}
               className="text-blue-500 flex items-center hover:underline"
+              disabled={isLoading}
             >
               <FaLeftLong className="mr-2" /> Back
             </button>

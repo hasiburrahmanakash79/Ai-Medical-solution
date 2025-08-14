@@ -128,8 +128,8 @@ export const setAuthTokens = (accessToken, refreshToken) => {
 
 // Remove auth tokens
 export const removeAuthTokens = () => {
-  removeCookie("access", { path: "/" });
-  removeCookie("refresh", { path: "/" });
+  removeCookie("accessToken", { path: "/" });
+  removeCookie("refreshToken", { path: "/" });
   removeCookie("isAuthenticated", { path: "/" });
   // console.log("All auth tokens removed");
 };

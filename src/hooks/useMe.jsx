@@ -6,14 +6,18 @@ const useMe = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (signal) => {
     setLoading(true);
     try {
-      const response = await apiClient.get('/user/me');
+      const response = await apiClient.get('/user/me', { signal });
       setData(response.data);
       setError(null);
     } catch (err) {
-      setError(err.message || 'Failed to fetch Data');
+      if (err.name === 'AbortError') {
+        // Ignore abort errors
+        return;
+      }
+      setError(err.message || 'Failed to fetch user data');
       setData(null);
     } finally {
       setLoading(false);
@@ -21,14 +25,12 @@ const useMe = () => {
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
+    const controller = new AbortController();
 
-    fetchData().then(() => {
-      if (!isMounted) return;
-    });
+    fetchData(controller.signal);
 
     return () => {
-      isMounted = false;
+      controller.abort(); // Cancel the request on unmount
     };
   }, [fetchData]);
 

@@ -13,10 +13,15 @@ import Challenge from "../Pages/Dashboards/Challenge/Challenge";
 import PrivacyPolicy from "../Pages/Dashboards/Setting/PrivacyPolicy";
 import Tokens from "../Pages/Dashboards/Tokens/Tokens";
 import ForgetPassword from "../Pages/Authentication/ForgetPassword";
+import ProtectedRoute from "./ProtectedRoute";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Dashboard />,
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/",
@@ -57,7 +62,7 @@ const router = createBrowserRouter([
   //   element: <Signup />,
   // },
   {
-    path: "/otp",
+    path: "/otp-verification",
     element: <OtpVerification />,
   },
   {

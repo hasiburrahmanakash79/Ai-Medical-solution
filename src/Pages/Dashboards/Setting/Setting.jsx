@@ -1,9 +1,9 @@
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import CommonModal from "../../../components/Common/CommonModal";
 import { useForm } from "react-hook-form";
 import { RiArrowLeftLine } from "react-icons/ri";
+import CommonModal from "../../../components/CommonModal";
 
 const Setting = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);

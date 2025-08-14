@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { RiArrowLeftLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import CommonModal from "../../../components/Common/CommonModal";
+import CommonModal from "../../../components/CommonModal";
 
 const Challenge = () => {
   const navigate = useNavigate();
