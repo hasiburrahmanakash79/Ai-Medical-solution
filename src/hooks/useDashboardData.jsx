@@ -1,9 +1,7 @@
+import { useState, useEffect, useCallback } from "react";
+import apiClient from "../lib/api-client";
 
-
-import { useState, useEffect, useCallback } from 'react';
-import apiClient from '../lib/api-client';
-
-const useDashboardData = () => {
+const useDashboardData = (filter) => {
   const [homeData, setHomeData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,28 +9,26 @@ const useDashboardData = () => {
   const fetchHomeData = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await apiClient.get('/dashboard');
+      const response = await apiClient.get(`/dashboard?filter=${filter}`);
       setHomeData(response.data);
       setError(null);
     } catch (err) {
-      setError(err.message || 'Failed to fetch HomeData');
+      setError(err.message || "Failed to fetch HomeData");
       setHomeData(null);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [filter]);
 
   useEffect(() => {
     let isMounted = true;
-
-    fetchHomeData().then(() => {
-      if (!isMounted) return;
-    });
+    console.log(isMounted);
+    fetchHomeData();
 
     return () => {
       isMounted = false;
     };
-  }, [fetchHomeData]);
+  }, [fetchHomeData, filter]);
 
   return {
     homeData,

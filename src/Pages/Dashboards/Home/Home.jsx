@@ -5,10 +5,9 @@ import useDashboardData from "../../../hooks/useDashboardData";
 
 const Home = () => {
   const { homeData, loading } = useDashboardData();
-  const chartData = homeData?.data
 
   const recentToken = homeData?.data?.userToken;
-  
+
   if(loading){
     return <div>Loading...</div>;
   }
@@ -17,7 +16,7 @@ const Home = () => {
       <DashboardCard  homeData={homeData} loading={loading} />
       <div className="py-10 grid grid-cols-3 gap-7">
         <div className="col-span-1">
-          <WeeklyActivity chartData={chartData} />
+          <WeeklyActivity/>
         </div>
         <div className="col-span-2">
           <RecentToken  recentToken={recentToken} />

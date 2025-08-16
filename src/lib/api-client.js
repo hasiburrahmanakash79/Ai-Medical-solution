@@ -46,7 +46,7 @@ apiClient.interceptors.response.use(
     return response;
   },
   async (error) => {
-    console.error("API Response Error:", error.response?.data || error.message);
+    // console.error("API Response Error:", error.response?.data || error.message);
     // Check if response is HTML or non-JSON to avoid 'includes' error
     if (error.response && typeof error.response.data === "string") {
       return Promise.reject(new Error("Invalid response format from server (likely HTML)"));
